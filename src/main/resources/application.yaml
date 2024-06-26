@@ -1,0 +1,20 @@
+spring:
+  jpa:
+    hibernate:
+      show-sql: true
+      ddl-auto: create
+  datasource:
+    url: jdbc:postgresql://localhost:5432/news
+    username: postgres
+    password: 1234
+    driverClassName: org.postgresql.Driver
+
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        orm:
+          jdbc:
+            bind: TRACE
