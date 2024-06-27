@@ -33,7 +33,8 @@ public class NewsController {
 
     @GetMapping
     @ResponseStatus(OK)
-    public List<NewsDtoRs> getNewsByDateAndByCategory(@RequestParam LocalDate date, @RequestParam String nameCategory) {
+    public List<NewsDtoRs> getNewsByDateAndByCategory(@RequestParam LocalDate date,
+                                                      @RequestParam String nameCategory) {
         return newsService.getNewsByDateAndByCategory(date, nameCategory);
     }
 }

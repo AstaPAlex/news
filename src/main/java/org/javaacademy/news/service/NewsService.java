@@ -9,7 +9,6 @@ import org.javaacademy.news.entity.Category;
 import org.javaacademy.news.entity.News;
 import org.javaacademy.news.mapper.CategoryMapper;
 import org.javaacademy.news.mapper.NewsMapper;
-import org.javaacademy.news.repository.CategoryRepository;
 import org.javaacademy.news.repository.NewsRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,12 +23,12 @@ public class NewsService {
     private final NewsRepository newsRepository;
     private final NewsMapper newsMapper;
     private final CategoryMapper categoryMapper;
-    private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
     @Transactional
     public void createNews(NewsDto newsDto) {
         News news = newsMapper.convertToEntity(newsDto);
-        Optional<Category> category = categoryRepository.findFirstByName(newsDto.getNameCategory());
+        Optional<Category> category = categoryService.getOptionalCategoryByName(newsDto.getNameCategory());
         if (category.isPresent()) {
             news.setCategory(category.orElseThrow());
         }
@@ -46,12 +45,12 @@ public class NewsService {
 
     @Transactional
     public List<NewsDtoRs> getNewsByDateAndByCategory(LocalDate date, String nameCategory) {
-        Category category = categoryRepository.findFirstByNewsList_DateAndName(date, nameCategory).orElseThrow();
+        Category category = categoryService.getCategoryByNameAndDate(date, nameCategory);
         return newsMapper.convertToDto(category.getNewsList());
     }
 
     private List<CategoryDto> getCategoryByDate(LocalDate date) {
-        return categoryRepository.findAllByNewsList_Date(date).stream()
+        return categoryService.getAllCategoryByDate(date).stream()
                 .map(categoryMapper::convertToDto)
                 .toList();
     }
